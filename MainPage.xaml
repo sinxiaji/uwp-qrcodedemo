@@ -1,0 +1,81 @@
+﻿<Page
+    x:Class="QrcodeDemo.MainPage"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:QrcodeDemo"
+        xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:media="using:Microsoft.Xaml.Interactions.Media"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <SolidColorBrush x:Key="MaskSolidColorBrush" Color="Black" Opacity="0.7"/>
+        <Storyboard x:Name="LineStoryboard" AutoReverse="True" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="recScanning">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="-260"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <SolidColorBrush x:Key="RectangleRectangleBrush" Color="DodgerBlue"/>
+    </Page.Resources>
+    <interactivity:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <media:ControlStoryboardAction Storyboard="{StaticResource LineStoryboard}"/>
+        </core:EventTriggerBehavior>
+    </interactivity:Interaction.Behaviors>
+    <Grid x:Name="LayoutRoot" >
+        <Grid x:Name="ContentPanel" >
+            <!--视频流预览-->
+            <CaptureElement x:Name="VideoCapture" Stretch="UniformToFill" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Background="{StaticResource MaskSolidColorBrush}"/>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Background="{StaticResource MaskSolidColorBrush}" Grid.Column="0" />
+                    <Grid Width="260" Height="260" Grid.Column="1">
+                        <Rectangle Width="3" Height="30" Fill="{StaticResource RectangleRectangleBrush}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Rectangle Width="3" Height="30" Fill="{StaticResource RectangleRectangleBrush}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <Rectangle Width="3" Height="30" Fill="{StaticResource RectangleRectangleBrush}" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        <Rectangle Width="3" Height="30" Fill="{StaticResource RectangleRectangleBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                        <Rectangle Width="30" Height="3" Fill="{StaticResource RectangleRectangleBrush}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Rectangle Width="30" Height="3" Fill="{StaticResource RectangleRectangleBrush}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <Rectangle Width="30" Height="3" Fill="{StaticResource RectangleRectangleBrush}" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        <Rectangle Width="30" Height="3" Fill="{StaticResource RectangleRectangleBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                        <Rectangle x:Name="recScanning" Margin="3,0" Height="3" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Bottom" d:LayoutOverrides="Height">
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform/>
+                            </Rectangle.RenderTransform>
+                            <Rectangle.Projection>
+                                <PlaneProjection/>
+                            </Rectangle.Projection>
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                                    <GradientStop Color="#3306BCF1" Offset="0.15"/>
+                                    <GradientStop Color="#3306BCF1" Offset="0.85"/>
+                                    <GradientStop Color="#FF06BCF1" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                    <Border Background="{StaticResource MaskSolidColorBrush}" Grid.Column="2"/>
+                </Grid>
+                <Border Background="{StaticResource MaskSolidColorBrush}" Grid.Row="2"/>
+            </Grid>
+            <!--Tips-->
+            <TextBlock x:Name="tbkTip" FontSize="16" Margin="0,128,0,0" TextWrapping="Wrap" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center"  Text="提示：请将二维码图案放置在取景框内"/>
+        </Grid>
+        <!--扫描结果-->
+        <TextBlock x:Name="tbkResult"  Visibility="Collapsed" Foreground="Red" VerticalAlignment="Top" TextWrapping="Wrap"  Margin="12,18" FontSize="25" Text="扫描结果："/>
+        <Image x:Name="ImageShow" Width="160" VerticalAlignment="Bottom"/>
+    </Grid>
+</Page>
